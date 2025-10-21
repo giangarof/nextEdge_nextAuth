@@ -1,7 +1,9 @@
+import addJob from "@/app/actions/addJob";
+
 const AddPost = () => {
-    return ( <>
+    return (
         <form
-            action=""
+            action={addJob}
             className="max-w-lg mx-auto bg-white shadow-md rounded-2xl p-8 mt-10 space-y-6"
             >
             <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
@@ -14,6 +16,7 @@ const AddPost = () => {
                 </label>
                 <input
                 id="title"
+                name="title"
                 type="text"
                 placeholder="Enter job title"
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
@@ -26,8 +29,21 @@ const AddPost = () => {
                 </label>
                 <input
                 id="salary"
+                name="salary"
                 type="text"
                 placeholder="Enter salary"
+                className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                />
+            </div>
+            <div className="flex flex-col">
+                <label htmlFor="location" className="text-gray-700 font-medium mb-2">
+                Location
+                </label>
+                <input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="Enter location"
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -37,6 +53,7 @@ const AddPost = () => {
                 Description
                 </label>
                 <textarea
+                name="description"
                 id="description"
                 placeholder="Write a short job description"
                 className="border border-gray-300 rounded-lg px-4 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-cyan-400"
@@ -49,6 +66,7 @@ const AddPost = () => {
                 </label>
                 <input
                 id="company"
+                name="company"
                 type="text"
                 placeholder="Enter company name"
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
@@ -61,6 +79,7 @@ const AddPost = () => {
                 </label>
                 <select
                 id="type"
+                name="type"
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 >
                 <option>Full-time</option>
@@ -80,7 +99,7 @@ const AddPost = () => {
         </form>
 
     
-    </> );
+     );
 }
  
 export default AddPost;
