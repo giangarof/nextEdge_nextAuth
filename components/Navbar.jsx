@@ -99,10 +99,13 @@ const Navbar = () => {
                         {/* Dropdown */}
                         {dropdownOpen && (
                         <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded shadow-lg z-10">
-                            <Link href={`/profile/${session.user.id}`} className="block w-full text-left px-4 py-2 hover:bg-gray-200">Profile</Link>
+                            <Link onClick={() => setDropdownOpen(false)} href={`/profile/${session.user.id}`} className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200">Profile</Link>
                             <button
-                            className="block w-full text-left px-4 py-2 hover:bg-gray-200"
-                            onClick={() => signOut()}
+                            className="block w-full text-left px-4 py-2 hover:bg-gray-200 cursor-pointer hover:rounded"
+                            onClick={() => {
+                                setDropdownOpen(false)
+                                signOut()}
+                            }
                             >
                             Sign Out
                             </button>

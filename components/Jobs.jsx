@@ -1,4 +1,4 @@
-
+import Link from "next/link";
 const Jobs = ({jobs}) => {
     // console.log(jobs)
     
@@ -9,7 +9,7 @@ const Jobs = ({jobs}) => {
                 key={i}
                 className="bg-white shadow-md rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300"
                 >
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">{x.title}</h2>
+                <Link href={`/jobs/${x._id}`}><h2 className="text-xl font-semibold text-gray-800 mb-2">{x.title}</h2></Link>
                 <p className="text-gray-600 mb-4 line-clamp-3">{x.description}</p>
 
                 <div className="text-sm text-gray-500 flex flex-wrap gap-2">

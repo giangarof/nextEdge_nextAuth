@@ -1,43 +1,19 @@
-'use client'
-import { useSession } from "next-auth/react";
 
-const Profile = () => {
-  const {data:session} = useSession()
-    const user = {
-        profileImage: "",
-        name: "Gianmarco",
-        company: "giga dev",
-        role: "ceo",
-        booksmark: [
-           {
-            author: "Jhon doe",
-            title:"Fullstack developer",
-            location:"remote",
-            salary: 50000,
-            company: 'oracle',
-            description:"description template",
-            type: "Full time"
-        },
-        {
-            author: "Jhon doe",
-            title:"Java developer",
-            location:"remote",
-            salary: 70000,
-            company: 'oracle',
-            description:"description template",
-            type:"Internship"
-        },
-        {
-            author: "Jhon doe",
-            title:"Accountant",
-            location:"MS",
-            salary: 55000,
-            company: 'oracle',
-            description:"description template",
-            type: "Temporary"
-        },
-        ]
-    }
+import connectDB from "@/config/database";
+import { getSessionUser } from "@/utils/getSessionUser";
+import Job from "@/models/Job";
+import Link from "next/link";
+import { convertToSerializableObject } from "@/utils/convertToObject";
+
+const Profile = async () => {
+  await connectDB()
+  const userSession = await getSessionUser()
+  const {user} = userSession
+  const jobsDocs = await Job.find({author:user.id}).lean()
+  const jobs = jobsDocs.map(convertToSerializableObject)
+
+  console.log(jobs)
+   
     return ( <>
       <div className="min-h-screen bg-gray-50 py-10">
           {/* Profile Section */}
@@ -45,32 +21,36 @@ const Profile = () => {
             <div className="flex flex-col items-center">
               {/* Profile Image */}
               <img
-                src={session?.user?.image}
+                src={user?.image}
                 alt={user.name}
                 className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-cyan-100"
               />
 
               {/* User Info */}
-              <h1 className="text-2xl font-semibold text-gray-800">{session?.user?.name}</h1>
+              <h1 className="text-2xl font-semibold text-gray-800">{user?.name}</h1>
               <p className="text-gray-600 mt-1">
-                {user.company} &nbsp;|&nbsp; {user.role}
+                {user.company || "no company added"} &nbsp;|&nbsp; {user.role || "no role added"}
               </p>
+              <p className="text-gray-600 mt-1">{user.email}</p>
+              <button className="cursor-pointer mt-4 px-6 py-2 bg-blue-600 text-white font-medium rounded-lg">edit profile</button>
             </div>
           </div>
 
           {/* Saved Jobs Section */}
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-              Saved Jobs
+              My Jobs
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {user.booksmark.map((x, i) => (
+              {jobs.reverse().map((x, i) => (
                 <div
                   key={i}
                   className="bg-white shadow-md rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300"
-                >
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{x.title}</h3>
+                > 
+                  <Link href={`/jobs/${x._id}`}>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{x.title}</h3>
+                  </Link>
                   <p className="text-gray-600 mb-4 line-clamp-3">{x.description}</p>
 
                   <div className="text-sm text-gray-500 flex flex-wrap gap-2">
