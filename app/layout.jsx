@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 export const metadata = {
   title: "Job list application",
@@ -14,6 +16,7 @@ export default function RootLayout({ children }) {
         <body>
           <Navbar/>
           <main>{children}</main>
+          <ToastContainer />
         </body>
     </html>
       </AuthProvider>

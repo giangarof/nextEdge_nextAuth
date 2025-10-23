@@ -1,30 +1,44 @@
 'use client'
-import addJob from "@/app/actions/addJob";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import updateJob from "@/app/actions/updateJob";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-const AddPost = () => {
+const EditJob = ({job}) => {
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const addNewJob = async(e) =>{
 
-        e.preventDefault()
-        const formData = new FormData(e.target); // collect all input values
+    const updateHandler = async (e) => {
+        
+        e.preventDefault(); // prevent default form submission
+        setLoading(true)
+        
 
+        const form = e.target;
+        const formData = new FormData(form); // collect form inputs
         try {
-            await addJob(formData)
-            toast.success("Job added successfully")
-            router.push("/")
+            
+            await updateJob(job._id, formData);
+            setLoading(false);
+            setShowConfirm(false);
+            toast.success('Job updated successfully')
+            router.push(`/jobs/${job._id}`)
         } catch (error) {
-            toast.error("job could not be added", error)
+            console.log(error)
+            setLoading(false);
+            toast.error('Job could not be updated')
         }
     }
-    return (
+    
+    return ( <>
         <form
-            onSubmit={addNewJob}
+            id="edit-job-form"
+            onSubmit={updateHandler}
             className="max-w-lg mx-auto bg-white shadow-md rounded-2xl p-8 mt-10 space-y-6"
             >
             <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
-                Add a New Job
+                Edit Form
             </h2>
 
             <div className="flex flex-col">
@@ -35,7 +49,7 @@ const AddPost = () => {
                 id="title"
                 name="title"
                 type="text"
-                placeholder="Enter job title"
+                defaultValue={job.title}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -48,7 +62,7 @@ const AddPost = () => {
                 id="salary"
                 name="salary"
                 type="text"
-                placeholder="Enter salary"
+                defaultValue={job.salary}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -60,7 +74,7 @@ const AddPost = () => {
                 id="location"
                 name="location"
                 type="text"
-                placeholder="Enter location"
+                defaultValue={job.location}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -72,7 +86,7 @@ const AddPost = () => {
                 <textarea
                 name="description"
                 id="description"
-                placeholder="Write a short job description"
+                defaultValue={job.description}
                 className="border border-gray-300 rounded-lg px-4 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -85,7 +99,7 @@ const AddPost = () => {
                 id="company"
                 name="company"
                 type="text"
-                placeholder="Enter company name"
+                defaultValue={job.company}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
             </div>
@@ -97,6 +111,7 @@ const AddPost = () => {
                 <select
                 id="type"
                 name="type"
+                defaultValue={job.type}
                 className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 >
                 <option>Full-time</option>
@@ -108,15 +123,48 @@ const AddPost = () => {
             </div>
 
             <button
-                type="submit"
+                type="button"
+                onClick={() => setShowConfirm(true)}
+                className="w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-cyan-600 transition"
+            >
+                Update Job
+            </button>
+            <button
                 className="w-full bg-cyan-500 text-white font-semibold py-2 rounded-lg hover:bg-cyan-600 transition"
             >
-                Add Job
+                Go back
             </button>
         </form>
 
-    
-     );
+        {/* Confirmation Modal */}
+            {showConfirm && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                <div className="bg-white rounded-xl shadow-xl p-6 w-80 text-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                    Are you sure you want to update this job?
+                    </h3>
+                    <div className="flex justify-center gap-4">
+                    <button
+                        type="button"
+                        onClick={() => setShowConfirm(false)}
+                        className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        form="edit-job-form"
+                        type="submit"
+                        // onClick={() => updateHandler}
+                        disabled={loading}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg"
+                    >
+                        {loading ? "Updating..." : "Yes, Update"}
+                    </button>
+                    </div>
+                </div>
+                </div>
+            )}
+    </> );
 }
  
-export default AddPost;
+export default EditJob;

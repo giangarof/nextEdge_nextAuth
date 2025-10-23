@@ -5,13 +5,18 @@ import { getSessionUser } from "@/utils/getSessionUser"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
-async function addJob(formData){
+const updateJob = async (jobId, formData) => {
     await connectDB()
     const sessionUser = await getSessionUser()
     if(!sessionUser || !sessionUser.userId){
         throw new Error('User ID is required')
     }
     const {userId} = sessionUser
+
+    const existingJob = await Job.findById(jobId)
+    if(existingJob.author.toString() !== userId){
+        throw new Error("Unable to update. User doesn't own the job post")
+    }
 
 
     // FormData from the Job submission
@@ -33,11 +38,10 @@ async function addJob(formData){
         company: company, 
         type: type
     }
-    
-    const newJob = new Job(jobData)
-    await newJob.save()
-    revalidatePath('/', "layout")
-    // redirect(`/jobs/${newJob._id}`)
+
+    const updatedJob = await Job.findByIdAndUpdate(jobId, jobData)
+    revalidatePath('/', 'layout')
+    // redirect(`/`)
 }
- 
-export default addJob;
+
+export default updateJob
