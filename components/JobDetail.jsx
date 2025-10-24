@@ -30,10 +30,10 @@ const JobDetail = ({job: initial}) => {
             <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold text-gray-900">{job?.title}</h1>
-                <span className="text-sm font-medium text-cyan-700 bg-cyan-50 px-3 py-1 rounded-full">
-                    {job?.type}
-                </span>
+                    <h1 className="text-3xl font-bold text-gray-900">{job?.title}</h1>
+                    <span className="text-sm font-medium text-cyan-700 bg-cyan-50 px-3 py-1 rounded-full">
+                        {job?.type}
+                    </span>
                 </div>
 
                 {/* Company & Meta */}
