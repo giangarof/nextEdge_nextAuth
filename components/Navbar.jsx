@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import Image from "next/image";
+import UnreadMessage from "./UnreadMessage";
 
 const Navbar = () => {
   const path = usePathname();
@@ -89,45 +90,56 @@ const Navbar = () => {
             ))}
 
           {session && session.user.image && (
-            <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer">
-              <Image
-                src={session.user.image}
-                alt="Profile Picture"
-                width={40}
-                height={40}
-                className="object-cover"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              />
+            <>
+              {/* <span>Unread Messages</span> */}
+              <UnreadMessage />
+              <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer">
+                <Image
+                  src={session.user.image}
+                  alt="Profile Picture"
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                />
 
-              {/* Dropdown */}
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded shadow-lg z-10">
-                  <Link
-                    onClick={() => setDropdownOpen(false)}
-                    href={`/profile/${session.user.id}`}
-                    className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200"
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    onClick={() => setDropdownOpen(false)}
-                    href={`/jobs/saved`}
-                    className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200"
-                  >
-                    Saved Jobs
-                  </Link>
-                  <button
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-200 cursor-pointer hover:rounded"
-                    onClick={() => {
-                      setDropdownOpen(false);
-                      signOut();
-                    }}
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
+                {/* Dropdown */}
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-32 bg-white text-black rounded shadow-lg z-10">
+                    <Link
+                      onClick={() => setDropdownOpen(false)}
+                      href={`/profile/${session.user.id}`}
+                      className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      onClick={() => setDropdownOpen(false)}
+                      href={`/messages`}
+                      className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200"
+                    >
+                      Messages
+                    </Link>
+                    <Link
+                      onClick={() => setDropdownOpen(false)}
+                      href={`/jobs/saved`}
+                      className="block hover:rounded w-full text-left px-4 py-2 hover:bg-gray-200"
+                    >
+                      Saved Jobs
+                    </Link>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-200 cursor-pointer hover:rounded"
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        signOut();
+                      }}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </ul>
       </nav>

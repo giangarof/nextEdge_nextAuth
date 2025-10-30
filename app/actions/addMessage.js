@@ -3,7 +3,7 @@ import connectDB from "@/config/database";
 import Message from "@/models/Message";
 import { getSessionUser } from "@/utils/getSessionUser";
 
-async function addMessage(formData) {
+async function addMessage(previousState, formData) {
   await connectDB();
   const sessionUser = await getSessionUser();
   if (!sessionUser || !sessionUser.userId) {
@@ -19,14 +19,14 @@ async function addMessage(formData) {
   const newMessage = new Message({
     sender: userId,
     recipient,
-    job: formData("job"),
-    name: formData("name"),
-    email: formData("email"),
-    body: formData("body"),
+    job: formData.get("job"),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    body: formData.get("body"),
   });
 
   await newMessage.save();
-  return { submitted: true };
+  return { success: true, submitted: true };
 }
 
 export default addMessage;
