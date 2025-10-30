@@ -70,7 +70,7 @@ const MessageCard = ({ message }) => {
           </div>
 
           <a
-            href={`mailto:${message.email}`}
+            href={`mailto:${message.email}?subject=${encodeURIComponent(message.job?.title)}`}
             className="inline-flex items-center gap-1 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 shadow-sm"
           >
             Reply
